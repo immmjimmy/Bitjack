@@ -34,12 +34,14 @@ app.get("/getLeaderboard/:streamerName", function(req, res) {
 });
 
 app.get("/hit/:streamerName/:userName", function(req, res) {
+    backendModule.addToPot(req.params["streamerName"], req.params['amount'])
   res.send(
     backendModule.addToQueue(req.params['streamerName'], req.params['userName'], 'hit')
   );
 });
 
 app.get("/stand/:streamerName/:userName", function(req, res) {
+    backendModule.addToPot(req.params["streamerName"], req.params['amount'])
   res.send(
     backendModule.addToQueue(req.params["streamerName"], req.params["userName"], 'stand')
   );
