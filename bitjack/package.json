@@ -33,9 +33,10 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.4.3",
-    "@material-ui/icons": "^4.4.3",
+    "@material-ui/styles": "^4.4.3",
     "jsonwebtoken": "^8.3.0",
     "react": "^16.3.2",
+    "react-card-flip": "^0.8.1",
     "react-dom": "^16.3.2"
   },
   "jest": {
