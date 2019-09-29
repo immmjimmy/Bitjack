@@ -610,3 +610,4 @@ exports.setStreamHand = setStreamHand;
 exports.getStreamHand = getStreamHand;
 exports.setLeaderboard = setLeaderboard;
 exports.addToQueue = addToQueue;
+exports.addToPot = addToPot;
