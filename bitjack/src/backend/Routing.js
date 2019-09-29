@@ -35,19 +35,13 @@ app.get("/getLeaderboard/:streamerName", function(req, res) {
 
 app.get("/hit/:streamerName/:userName", function(req, res) {
   res.send(
-    backendModule.hit(req.params["streamerName"], req.params["userName"])
+    backendModule.addToQueue(req.params['streamerName'], req.params['userName'], 'hit')
   );
 });
 
 app.get("/stand/:streamerName/:userName", function(req, res) {
   res.send(
-    backendModule.stand(req.params["streamerName"], req.params["userName"])
-  );
-});
-
-app.get("/addToQueue/:streamerName/:userName", function(req, res) {
-  res.send(
-    backendModule.addToQueue(req.params["streamerName"], req.params["userName"])
+    backendModule.addToQueue(req.params["streamerName"], req.params["userName"], 'stand')
   );
 });
 
