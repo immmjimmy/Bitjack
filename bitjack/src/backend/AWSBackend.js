@@ -18,473 +18,482 @@ const queueID = 4;
 const leaderboardID = 5;
 
 function exists(col, paramID, genericFunction) {
-    let result = col.find({ 'id': paramID });
+  let result = col.find({ 'id': paramID });
 
-    result.toArray(function (err, result) {
-        if (result.length > 0) {
-            genericFunction(true);
-        } else {
-            genericFunction(false);
-        }
-    });
+  result.toArray(function (err, result) {
+    if (result.length > 0) {
+      genericFunction(true);
+    } else {
+      genericFunction(false);
+    }
+  });
 }
 
 function getDocument(col, paramID, genericFunction) {
-    let result = col.find({ 'id': paramID });
+  let result = col.find({ 'id': paramID });
 
-    result.toArray(function (err, result) {
-        genericFunction(result);
-    });
+  result.toArray(function (err, result) {
+    genericFunction(result);
+  });
 }
 
 function getLeaderboard(streamerName) {
-    return new Promise(function(resolve, reject) {
-        client.connect(url, function (err, client) {
-            db = client.db(dbName);
-            col = db.collection(streamerName);
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-            let result = col.find({'id': leaderboardID });
-            getDocument(col, leaderboardID, function (result) {
-                client.close();
-                if (result.length > 0) {
-                    resolve(result);
-                } else {
-                    reject('No Results');
-                }
-                console.log(result);
-            })
-        });
+      let result = col.find({ 'id': leaderboardID });
+      getDocument(col, leaderboardID, function (result) {
+        client.close();
+        if (result.length > 0) {
+          resolve(result);
+        } else {
+          reject('No Results');
+        }
+        console.log(result);
+      })
     });
+  });
 }
 
 function setLeaderboard(streamerName, leaderboard) {
-    client.connect(url, function (err, client) {
-        db = client.db(dbName);
-        col = db.collection(streamerName);
+  client.connect(url, function (err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
 
-        exists(col, leaderboardID, function (booleanboy) {
-            console.log(booleanboy);
-            if (booleanboy) {
-                col.updateOne({ 'id': leaderboardID }, { 'Leaderboard': leaderboard, 'id': leaderboardID }, function (err, result) {
-                    //console.log(result);
-                });
-            } else {
-                col.insertOne({ 'Leaderboard': leaderboard, 'id': leaderboardID }, function (err, result) {
-                    //console.log(result);
-                });
-            }
-
-            client.close();
-            return 'Ok';
+    exists(col, leaderboardID, function (booleanboy) {
+      console.log(booleanboy);
+      if (booleanboy) {
+        col.updateOne({ 'id': leaderboardID }, { $set: { 'Leaderboard': leaderboard } }, function (err, result) {
+          console.log(result);
         });
+      } else {
+        col.insertOne({ 'Leaderboard': leaderboard, 'id': leaderboardID }, function (err, result) {
+          console.log(result);
+        });
+      }
+
+      client.close();
+      return 'Ok';
     });
+  });
 }
 
 function getStreamHand(streamerName) {
-    return new Promise(function(resolve, reject) {
-        client.connect(url, function (err, client) {
-            db = client.db(dbName);
-            col = db.collection(streamerName);
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-            let result = col.find({ 'id': sHandID });
-            getDocument(col, sHandID, function (result) {
-                client.close();
-                if (result.length > 0) {
-                    resolve(result);
-                } else {
-                    reject('No Results');
-                }
-                console.log(result);
-            })
-        });
+      let result = col.find({ 'id': sHandID });
+      getDocument(col, sHandID, function (result) {
+        client.close();
+        if (result.length > 0) {
+          resolve(result);
+        } else {
+          reject('No Results');
+        }
+        console.log(result);
+      })
     });
+  });
 }
 
 function setStreamHand(streamerName, streamHand) {
-    client.connect(url, function (err, client) {
-        db = client.db(dbName);
-        col = db.collection(streamerName);
-        exists(col, sHandID, function (booleanbud) {
-            console.log(booleanbud);
-            if (booleanbud) {
-                col.updateOne({ 'id': sHandID }, { 'streamHand': streamHand, 'id': sHandID }, function (err, result) {
-                    //console.log(result);
-                });
-            } else {
-                col.insertOne({ 'streamHand': sHand, 'id': sHandID }, function (err, result) {
-                    //console.log(result);
-                });
-            }
-            client.close();
-            return 'Ok';
+  client.connect(url, function (err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
+    exists(col, sHandID, function (booleanbud) {
+      console.log(booleanbud);
+      if (booleanbud) {
+        col.updateOne({ 'id': sHandID }, { $set: { 'streamHand': streamHand, 'id': sHandID } }, function (err, result) {
+          console.log(result);
         });
-
+      } else {
+        col.insertOne({ 'streamHand': sHand, 'id': sHandID }, function (err, result) {
+          console.log(result);
+        });
+      }
+      client.close();
+      return 'Ok';
     });
+
+  });
 }
 
 function getDealerHand(streamerName) {
-    return new Promise(function(resolve, reject) {
-        client.connect(url, function (err, client) {
-            db = client.db(dbName);
-            col = db.collection(streamerName);
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-            let result = col.find({ 'id': dHandID });
-            getDocument(col, dHandID, function (result) {
-                client.close();
-                if (result.length > 0) {
-                    resolve(result);
-                } else {
-                    reject('No Results');
-                }
-                console.log(result);
-            })
-        });
+      let result = col.find({ 'id': dHandID });
+      getDocument(col, dHandID, function (result) {
+        client.close();
+        if (result.length > 0) {
+          resolve(result);
+        } else {
+          reject('No Results');
+        }
+        console.log(result);
+      })
     });
+  });
 }
 
 function setDealerHand(streamerName, dealerHand) {
-    client.connect(url, function (err, client) {
-        db = client.db(dbName);
-        col = db.collection(streamerName);
-        exists(col, dHandID, function (booleanboy) {
-            console.log(booleanboy);
-            if (booleanboy) {
-                col.updateOne({ 'id': dHandID }, { 'DealerHand': dealerHand, 'id': dHandID }, function (err, result) {
-                    //console.log(result);
-                });
-            } else {
-                col.insertOne({ 'DealerHand': dealerHand, 'id': dHandID }, function (err, result) {
-                    //console.log(result);
-                });
-            }
-            client.close();
-            return 'ok';
+  client.connect(url, function (err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
+    exists(col, dHandID, function (booleanboy) {
+      console.log(booleanboy);
+      if (booleanboy) {
+        col.updateOne({ 'id': dHandID }, { $set: { 'DealerHand': dealerHand, 'id': dHandID } }, function (err, result) {
+          //console.log(result);
         });
+      } else {
+        col.insertOne({ 'DealerHand': dealerHand, 'id': dHandID }, function (err, result) {
+          //console.log(result);
+        });
+      }
+      client.close();
+      return 'ok';
     });
+  });
 }
 
 function getQueue(streamerName) {
-    return new Promise(function(resolve, reject) {
-        client.connect(url, function (err, client) {
-            db = client.db(dbName);
-            col = db.collection(streamerName);
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-            let result = col.find({ 'id': queueID });
-            getDocument(col, queueID, function (result) {
-                client.close();
-                if (result.length > 0) {
-                    resolve(result);
-                } else {
-                    reject('No Results');
-                }
-                console.log(result);
-            })
-        });
+      let result = col.find({ 'id': queueID });
+      getDocument(col, queueID, function (result) {
+        client.close();
+        if (result.length > 0) {
+          resolve(result);
+        } else {
+          reject('No Results');
+        }
+        console.log(result);
+      })
     });
+  });
 }
 
 function setQueue(streamerName, queue) {
-    client.connect(url, function (err, client) {
-        db = client.db(dbName);
-        col = db.collection(streamerName);
+  client.connect(url, function (err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
 
-        exists(col, queueID, function (booleanboy) {
-            console.log(booleanboy);
-            if (booleanboy) {
-                col.updateOne({ 'id': queueID }, { 'queue': queue, 'id': queueID }, function (err, result) {
-                    //console.log(result);
-                });
-            } else {
-                col.insertOne({ 'queue': queue, 'id': queueID }, function (err, result) {
-                    //console.log(result);
-                });
-            }
-
-            client.close();
-            return 'Ok';
+    exists(col, queueID, function (booleanboy) {
+      console.log(booleanboy);
+      if (booleanboy) {
+        col.updateOne({ 'id': queueID }, { $set: { 'queue': queue } }, function (err, result) {
+          console.log(err);
+          console.log(result);
         });
+      } else {
+        col.insertOne({ 'queue': queue, 'id': queueID }, function (err, result) {
+          //console.log(result);
+        });
+      }
+
+      client.close();
+      return 'Ok';
     });
+  });
 }
 
 function getPot(streamerName) {
-    return new Promise(function(resolve, reject) {
-        client.connect(url, function (err, client) {
-            db = client.db(dbName);
-            col = db.collection(streamerName);
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-            let result = col.find({ 'id': potID });
-            getDocument(col, potID, function (result) {
-                client.close();
-                if (result.length > 0) {
-                    resolve(result);
-                } else {
-                    reject('No Results');
-                }
-                console.log(result);
-            })
-        });
+      let result = col.find({ 'id': potID });
+      getDocument(col, potID, function (result) {
+        client.close();
+        if (result.length > 0) {
+          resolve(result);
+        } else {
+          reject('No Results');
+        }
+        console.log(result);
+      })
     });
+  });
 }
 
 function setPot(streamerName, pot) {
-    client.connect(url, function (err, client) {
-        db = client.db(dbName);
-        col = db.collection(streamerName);
+  client.connect(url, function (err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
 
-        exists(col, potID, function (booleanboy) {
-            console.log(booleanboy);
-            if (booleanboy) {
-                col.updateOne({ 'id': potID }, { 'pot': pot, 'id': potID }, function (err, result) {
-                    //console.log(result);
-                });
-            } else {
-                col.insertOne({ 'pot': pot, 'id': potID }, function (err, result) {
-                    //console.log(result);
-                });
-            }
-
-            client.close();
-            return 'Ok';
+    exists(col, potID, function (booleanboy) {
+      console.log(booleanboy);
+      if (booleanboy) {
+        col.updateOne({ 'id': potID }, { 'pot': pot, 'id': potID }, function (err, result) {
+          //console.log(result);
         });
+      } else {
+        col.insertOne({ 'pot': pot, 'id': potID }, function (err, result) {
+          //console.log(result);
+        });
+      }
+
+      client.close();
+      return 'Ok';
     });
+  });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function hit(streamerName, userName) {
-    getStreamHand(streamerName).resolve(function (result) {
-        let playerHand = result;
-        getQueue(streamerName).then(function (result) {
-            let gameQueue = result;
-            sHand = nullCheck(sHand, playerHand);
-            queue = nullCheck(queue, gameQueue);
+  getStreamHand(streamerName).then(function (result) {
+    let playerHand = result;
+    playerHand = playerHand[0]['streamHand'];
+    getQueue(streamerName).then(function (result) {
+      let gameQueue = result;
+      gameQueue = gameQueue[0]['queue'];
+      sHand = nullCheck(sHand, playerHand);
+      queue = nullCheck(queue, gameQueue);
 
-            sHand.push(getCard());
+      sHand.push(getCard());
 
-            let sValue = handValue(sHand);
-            if (sValue > 21) {
-                pBust(streamerName)
-            } else if (sValue == 21) {
-                win(streamerName, userName);
-            }
+      let sValue = handValue(sHand);
+      if (sValue > 21) {
+        pBust(streamerName)
+      } else if (sValue == 21) {
+        win(streamerName, userName);
+      }
 
-            queue.shift();
-            setQueue(streamerName, queue);
+      queue.shift();
+      setQueue(streamerName, queue);
+      setStreamHand(streamerName, sHand);
 
-            return 'Ok';
-        }, function (err) {
-            console.log(err);
-        });
+      return 'Ok';
     }, function (err) {
-        console.log(err);
+      console.log(err);
     });
+  }, function (err) {
+    console.log(err);
+  });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function stand(streamerName, userName) {
-    getStreamHand(streamerName).then(function (result) {
-        let playerHand = result;
-        getDealerHand(streamerName).then(function (result) {
-            let dealerHand = result;
-            getQueue(streamerName).then(function (result) {
-                let gameQueue = result;
-                sHand = nullCheck(sHand, playerHand);
-                dHand = nullCheck(dHand, dealerHand);
-                queue = nullCheck(queue, gameQueue);
-
-                while (handValue(dHand) < 17) {
-                    dHand.push(getCard());
-                }
-
-                if (handValue(sHand) <= handValue(dHand)) {
-                    pBust(streamerName);
-                } else {
-                    win(streamerName, userName);
-                }
-
-                queue.shift();
-                setQueue(streamerName, queue);
-
-                return 'Ok';
-            }, function (err) {
-                console.log(err);
-            });
-        }, function (err) {
-            console.log(err);
-        });
-    }, function (err) {
-        console.log(err);
-    });
-}
-
-function addToQueue(streamerName, userName) {
-    getQueue(streamerName).then(function (result) {
+  getStreamHand(streamerName).then(function (result) {
+    let playerHand = result;
+    playerHand = playerHand[0]['streamHand'];
+    getDealerHand(streamerName).then(function (result) {
+      let dealerHand = result;
+      dealerHand = dealerHand[0]['DealerHand'];
+      getQueue(streamerName).then(function (result) {
         let gameQueue = result;
+        gameQueue = gameQueue[0]['queue'];
+        sHand = nullCheck(sHand, playerHand);
+        dHand = nullCheck(dHand, dealerHand);
         queue = nullCheck(queue, gameQueue);
 
-        queue.push(userName);
+        while (handValue(dHand) < 17) {
+          dHand.push(getCard());
+        }
+
+        if (handValue(sHand) <= handValue(dHand)) {
+          pBust(streamerName);
+        } else {
+          win(streamerName, userName);
+        }
+
+        queue.shift();
+        setQueue(streamerName, queue);
+        setStreamHand(streamerName, sHand);
+        setDealerHand(dealerHand, dHand);
 
         return 'Ok';
-    }, function (err) {
+      }, function (err) {
         console.log(err);
+      });
+    }, function (err) {
+      console.log(err);
     });
+  }, function (err) {
+    console.log(err);
+  });
+}
+
+function addToQueue(streamerName, userName, action) {
+  getQueue(streamerName).then(function (result) {
+    let gameQueue = result;
+    gameQueue = gameQueue[0]['queue'];
+    queue = nullCheck(queue, gameQueue);
+
+    queue.push([userName, action]);
+
+    setQueue(streamerName, queue);
+    return 'Ok';
+  }, function (err) {
+    console.log(err);
+  });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function win(streamerName, userName) {
-    getPot(streamerName).then(function (result) {
-        let gamePot = result;
-        pot = nullCheck(pot, gamePot);
+  getPot(streamerName).then(function (result) {
+    let gamePot = result;
+    gamePot = gamePot[0]['pot'];
+    pot = nullCheck(pot, gamePot);
 
-        insertUser(streamerName, userName);
-        pot = 0;
-        sHand = [getCard(), getCard()];
-        initDealer(streamerName);
+    insertUser(streamerName, userName);
+    pot = 0;
+    sHand = [getCard(), getCard()];
+    initDealer(streamerName);
 
-        setStreamHand(streamerName, sHand);
-        setDealerHand(streamerName, dHand);
-        setPot(streamerName, pot);
+    setStreamHand(streamerName, sHand);
+    setDealerHand(streamerName, dHand);
+    setPot(streamerName, pot);
 
-        return 'Ok';
-    }, function (err) {
-        console.log(err);
-    });
+    return 'Ok';
+  }, function (err) {
+    console.log(err);
+  });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function insertUser(streamerName, userName) {
-    getLeaderboard(streamerName).then(function (result) {
-        let leaderboard = result;
+  getLeaderboard(streamerName).then(function (result) {
+    let leaderboard = result;
+    leaderboard = leaderboard[0]['Leaderboard'];
 
-        if (leaderboard) {
-            leaderboard = [];
-            leaderboard.push([username, pot]);
-        } else {
-            let index = leaderboard.indexof(userName);
+    if (leaderboard) {
+      leaderboard = [streamerName];
+      leaderboard.push([username, pot]);
+    } else {
+      let index = leaderboard.indexof(userName);
 
-            if (index >= 0) {
-                leaderboard[index][1] += pot;
-                let temp = leader[index];
-                leaderboard.splice(index, 1);
-                for (let i = 0; i < leaderboard.length; i++) {
-                    if (leaderboard[i][1] < pot) {
-                        leaderboard.splice(i, 0, temp);
-                    }
-                }
-            } else {
-                for (let i = 0; i < leaderboard.length; i++) {
-                    if (leaderboard[i][1] < pot) {
-                        leaderboard.splice(i, 0, [username, pot]);
-                    }
-                }
-            }
+      if (index >= 0) {
+        leaderboard[index][1] += pot;
+        let temp = leader[index];
+        leaderboard.splice(index, 1);
+        for (let i = 0; i < leaderboard.length; i++) {
+          if (leaderboard[i][1] < pot) {
+            leaderboard.splice(i, 0, temp);
+          }
         }
+      } else {
+        for (let i = 0; i < leaderboard.length; i++) {
+          if (leaderboard[i][1] < pot) {
+            leaderboard.splice(i, 0, [username, pot]);
+          }
+        }
+      }
+    }
 
-        setLeaderboard(streamerName, leaderboard);
+    setLeaderboard(streamerName, leaderboard);
 
-        return 'Ok';
-    }, function (err) {
-        console.log(err);
-    });
+    return 'Ok';
+  }, function (err) {
+    console.log(err);
+  });
 }
 
 function pBust(streamerName) {
-    getStreamHand(streamerName).then(function (result) {
-        let playerHand = result;
-        getDealerHand(streamerName).then(function (result) {
-            let dealerHand = result;
-            getPot(streamerName).then(function (result) {
-                let gamePot = result;
+  pot = 0;
+  sHand = [getCard(), getCard()];
+  initDealer(streamerName);
 
-                sHand = nullCheck(sHand, playerHand);
-                dHand = nullCheck(dHand, dealerHand);
-                pot = nullCheck(pot, gamePot);
+  setPot(streamerName, pot);
+  setStreamHand(streamerName, sHand);
+  setDealerHand(streamerName, dHand);
 
-                insertUser(streamerName, streamerName);
+  return 'Ok';
+}
 
-                pot = 0;
-                sHand = [getCard(), getCard()];
-                initDealer(streamerName);
+function addToPot(streamerName, addition) {
+  getPot(streamerName).then(function (result) {
+    let gamePot = result;
+    gamePot = gamePot[0]['pot'];
+    pot = nullCheck(pot, gamePot);
 
-                setPot(streamerName, pot);
-                setStreamHand(streamerName, sHand);
-                setDealerHand(streamerName, dHand);
+    pot = pot + addition;
 
-                return 'Ok';
-            }, function (err) {
-                console.log(err);
-            })
-        }, function (err) {
-            console.log(err);
-        });
-    }, function (err) {
-        console.log(err);
-    });
+    setPot(streamerName, pot);
+
+    return 'Ok';
+  }, function (err) {
+    console.log(err);
+  });
 }
 
 function handValue(hand) {
-    let sum = 0;
-    let aces = 0;
+  let sum = 0;
+  let aces = 0;
 
-    for (let i = 0; i < hand.length; i++) {
-        let value = cardValue(hand[i]);
-        if (value == 1) {
-            aces = aces + 1;
-        } else {
-            sum = value;
-        }
+  for (let i = 0; i < hand.length; i++) {
+    let value = cardValue(hand[i]);
+    if (value == 1) {
+      aces = aces + 1;
+    } else {
+      sum = sum + value;
     }
+  }
 
-    sum = sum + aces - 1;
-    if (sum < 11) {
-        return sum + 11;
-    }
+  sum = sum + aces - 1;
+  if (sum < 11) {
+    return sum + 11;
+  } else {
+    return sum + 1;
+  }
 }
 
 function cardValue(card) {
-    card = (card % 13) + 1;
-    card = Math.min(card, 10);
-    if (card == 1) {
-        return 11;
-    } else {
-        return card;
-    }
+  card = (card % 13) + 1;
+  card = Math.min(card, 10);
+  if (card == 1) {
+    return 11;
+  } else {
+    return card;
+  }
 }
 
 function cardSuit(card) {
-    return int(card / 13);
+  return int(card / 13);
 }
 
 function getCard() {
-    return Math.floor(Math.random() * 52);
+  return Math.floor(Math.random() * 52);
 }
 
 function initDealer(streamerName) {
-    dHand = [getCard(), getCard()];
-    if (handValue(dHand) == 21) {
-        initDealer(streamerName);
-    } else {
-        setDealerHand(streamerName, dHand);
-    }
+  dHand = [getCard(), getCard()];
+  if (handValue(dHand) == 21) {
+    initDealer(streamerName);
+  } else {
+    setDealerHand(streamerName, dHand);
+  }
 }
 
 function nullCheck(local, db) {
-    if (db) {
-        return db;
-    }
-    return local;
+  if (db) {
+    return db;
+  }
+  return local;
 }
 
 function initialize(streamerName) {
-    initDealer(streamerName);
-    setLeaderboard(streamerName, []);
-    setStreamHand(streamerName, sHand);
-    setDealerHand(streamerName, dHand);
-    setQueue(streamerName, queue);
-    setPot(streamerName, pot);
+  initDealer(streamerName);
+  setLeaderboard(streamerName, [streamerName]);
+  setStreamHand(streamerName, sHand);
+  setDealerHand(streamerName, dHand);
+  setQueue(streamerName, queue);
+  setPot(streamerName, pot);
 }
 
 function closeConnect() {
-    client.close();
+  client.close();
 }
 
 exports.getLeaderboard = getLeaderboard;
