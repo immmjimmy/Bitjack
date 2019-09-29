@@ -10,8 +10,8 @@ class Game extends Component {
 
     this.state = {
       pot: 0,
-      streamerHand: [],
-      viewerHand: []
+      dealerHand: [],
+      streamHand: []
     };
   }
 
@@ -26,24 +26,82 @@ class Game extends Component {
       });
 
     axios
-      .get("http://localhost:8081/getStreamHand/gamesdonequick")
+      .get("http://localhost:8081/getPot/gamesdonequick")
       .then(res => {
         this.setState({
-          streamerHand: res.data[0].streamHand
+          pot: res.data[0].pot
         });
       })
       .catch(err => {
         console.log(err);
       });
+
+    axios
+      .get("http://localhost:8081/getDealerHand/gamesdonequick")
+      .then(res => {
+        this.setState({
+          dealerHand: res.data[0].DealerHand
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    axios
+      .get("http://localhost:8081/getStreamHand/gamesdonequick")
+      .then(res => {
+        this.setState({
+          streamHand: res.data[0].streamHand
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    setInterval(() => {
+      axios
+      .get("http://localhost:8081/getPot/gamesdonequick")
+      .then(res => {
+        this.setState({
+          pot: res.data[0].pot
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
+      axios
+        .get("http://localhost:8081/getStreamHand/gamesdonequick")
+        .then(res => {
+          this.setState({
+            streamHand: res.data[0].streamHand
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      axios
+        .get("http://localhost:8081/getDealerHand/gamesdonequick")
+        .then(res => {
+          this.setState({
+            dealerHand: res.data[0].DealerHand
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }, 10000);
   }
 
   render() {
-
-    const cards = this.state.streamerHand.map(x => {
-      return <Card number={x} key={x} />
+    const dealerCards = this.state.dealerHand.map(x => {
+      return <Card number={x} key={x} />;
     });
-    
-    console.log(cards);
+
+    const streamCards = this.state.streamHand.map(x => {
+      return <Card number={x} key={x} />;
+    });
 
     return (
       <Grid
@@ -59,7 +117,7 @@ class Game extends Component {
           alignItems="center"
           justify="center"
         >
-          {cards}
+          {dealerCards}
         </Grid>
         <Grid
           item
@@ -103,7 +161,9 @@ class Game extends Component {
           container
           alignItems="center"
           justify="center"
-        ></Grid>
+        >
+          {streamCards}
+        </Grid>
       </Grid>
     );
   }
