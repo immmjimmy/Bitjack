@@ -56,6 +56,7 @@ function getLeaderboard(streamerName) {
             );
         });
     });
+    
 }
 
 function setLeaderboard(streamerName, leaderboard) {
@@ -86,25 +87,42 @@ function getStreamHand(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
 
-        let result = col.find(
-            { },
-            {'StreamHand': 1, _id: 0 });
+        
+        let result = col.find({'id': sHandID});
+        getDocument(col, sHandID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('No Results');
+                    }
 
-        client.close();
-        return result;
-    });
+                });
+            });
+        });
 }
 
 function setStreamHand(streamerName, streamHand) {
     client.connect(url, function(err, client) {
         db = client.db(dbName);
         col = db.collection(streamerName);
-    
-        col.insertOne({'StreamHand': streamHand}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, sHandID, function(booleanbud) {
+            console.log(booleanbud);
+            if(booleanbud) {
+                col.updateOne({'id': sHandID},{'streamHand':streamHand, 'id':sHandID}, function(err, result) {
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'streamHand' : sHand, 'id':sHandID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
         client.close();
         return 'Ok';
+        });
+        
     });
 }
 
@@ -113,11 +131,19 @@ function getDealerHand(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'DealerHand': 1, _id: 0});
-        client.close();
-        return result;
+        let result = col.find({'id': dHandID});
+        getDocument(col,dHandID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) { 
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('NO results');
+                    }
+                }
+            );
+        });
     });
 }
 
@@ -125,13 +151,20 @@ function setDealerHand(streamerName, dealerHand) {
     client.connect(url, function(err, client) {
         db = client.db(dbName);
         col = db.collection(streamerName);
-    
-        col.insertOne({'DealerHand': dealerHand}, function(err, result) {
-            console.log(result);
-        });
-    
-        client.close();
-        return 'Ok';
+     exists(col, dHandID, function(booleanboy) {
+         console.log(booleanboy);
+         if(booleanboy) {
+             col.updateOne({'id':dHandID}, {'DealerHand': dealerHand, 'id':dHandID}, function(err, result) {
+                 //console.log(result);
+             });
+         } else {
+             col.insertOne({'DealerHand':dealerHand, 'id':dHandID}, function(err, result) {
+                 //console.log(result);
+             });
+         }
+         client.close();
+         return 'ok';
+     });
     });
 }
 
@@ -140,12 +173,19 @@ function getQueue(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'Queue': 1, _id: 0});
-    
-        client.close();
-        return result;
+        let result = col.find({'id': queueID});
+        getDocument(col, queueID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if (result.length > 0) {
+                        resolve(result);
+                    } else {
+                        reject('No results');
+                    }
+                }
+            );
+        });
     });
 }
 
@@ -154,12 +194,21 @@ function setQueue(streamerName, queue) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        col.insertOne({'Queue': queue}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, queueID, function(booleanboy) {
+            console.log(booleanboy);
+            if (booleanboy) {
+                col.updateOne({'id': queueID}, {'queue': queue, 'id': queueID}, function(err, result){
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'queue': queue, 'id': queueID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
     
-        client.close();
-        return 'Ok';
+            client.close();
+            return 'Ok';
+        });
     });
 }
 
@@ -168,12 +217,19 @@ function getPot(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'Pot': 1, _id: 0});
-        
-        client.close();
-        return result;
+        let result = col.find({'id': potID});
+        getDocument(col, potID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('No Results');
+                    }
+
+                });
+            });
     });
 }
 
@@ -182,150 +238,185 @@ function setPot(streamerName, pot) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        col.insertOne({'Pot': pot}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, potID, function(booleanboy) {
+            console.log(booleanboy);
+            if (booleanboy) {
+                col.updateOne({'id': potID}, {'pot': pot, 'id': potID}, function(err, result){
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'pot': pot, 'id': potID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
     
-        client.close();
-        return 'Ok';
+            client.close();
+            return 'Ok';
+        });
     });
 }
 
 // No need to open client below this point because we open it in our get and sets
-function startGame(streamerName) {
-    sHand = [getCard(), getCard()];
-    initDealer(streamerName);
-    pot = 0;
-    queue = [];
-
-    setStreamHand(streamerName, sHand);
-    setDealerHand(streamerName, dHand);
-    setPot(streamerName, pot);
-    setQueue(streamerName, queue);
-
-    return 'Ok';
-}
-
-// No need to open client below this point because we open it in our get and sets
 function hit(streamerName, userName) {
-    let playerHand = getStreamHand(streamerName);
-    let gameQueue = getQueue(streamerName);
+    getStreamHand(streamerName).then(function(result) {
+        let playerHand = result;
+        getQueue(streamerName).then(function(result) {
+            let gameQueue = result;
+            sHand = nullCheck(sHand, playerHand);
+            queue = nullCheck(queue, gameQueue);
 
-    sHand = nullCheck(sHand, playerHand);
-    queue = nullCheck(queue, gameQueue);
+            sHand.push(getCard());
 
-    sHand.push(getCard());
+            let sValue = handValue(sHand);
+            if (sValue > 21) {
+                pBust(streamerName)
+            } else if (sValue == 21) {
+                win(streamerName, userName);
+            }
 
-    let sValue = handValue(sHand);
-    if (sValue > 21) {
-        pBust(streamerName)
-    } else if (sValue == 21) {
-        win(streamerName, userName);
-    }
-
-    queue.shift();
-    setQueue(streamerName, queue);
-    
-    return 'Ok';
+            queue.shift();
+            setQueue(streamerName, queue);
+            
+            return 'Ok';
+        }, function(err) {
+            console.log(err);
+        });
+    }, function(err) {
+        console.log(err);
+    });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function stand(streamerName, userName) {
-    let playerHand = getStreamHand(streamerName);
-    let dealerHand = getDealerHand(streamerName);
+    getStreamHand(streamerName).then(function(result) {
+        let playerHand = result;
+        getDealerHand(streamerName).then(function(result) {
+            let dealerHand = result;
+            getQueue(streamerName).then(function(result) {
+                let gameQueue = result;
+                sHand = nullCheck(sHand, playerHand);
+                dHand = nullCheck(dHand, dealerHand);
+                queue = nullCheck(queue, gameQueue);
+            
+                while(handValue(dHand)<17){
+                    dHand.push(getCard());
+                }
+            
+                if (handValue(sHand) <= handValue(dHand)) {
+                    pBust(streamerName);
+                } else {
+                    win(streamerName, userName);
+                }
+            
+                queue.shift();
+                setQueue(streamerName, queue);
+            
+                return 'Ok';
+            }, function(err) {
+                console.log(err);
+            });
+        }, function(err) {
+            console.log(err);
+        });
+    }, function(err) {
+        console.log(err);
+    });
+}
+
+function addToQueue(streamerName, userName) {
     let gameQueue = getQueue(streamerName);
-
-    sHand = nullCheck(sHand, playerHand);
-    dHand = nullCheck(dHand, dealerHand);
-    queue = nullCheck(queue, gameQueue);
-
-    while(handValue(dHand)<17){
-        dHand.push(getCard());
-    }
-
-    if (handValue(sHand) <= handValue(dHand)) {
-        pBust(streamerName);
-    } else {
-        win(streamerName, userName);
-    }
-
-    queue.shift();
-    setQueue(streamerName, queue);
-
-    return 'Ok';
 }
 
 // No need to open client below this point because we open it in our get and sets
 function win(streamerName, userName) {
-    let gamePot = getPot(streamerName);
-
-    pot = nullCheck(pot, gamePot);
+    getPot(streamerName).then(function(result) {
+        let gamePot = result;
+        pot = nullCheck(pot, gamePot);
     
-    insertUser(streamerName, userName);
-    pot = 0;
-    sHand = [getCard(), getCard()];
-    initDealer(streamerName);
-    
-    setStreamHand(streamerName, sHand);
-    setDealerHand(streamerName, dHand);
-    setPot(streamerName, pot);
+        insertUser(streamerName, userName);
+        pot = 0;
+        sHand = [getCard(), getCard()];
+        initDealer(streamerName);
+        
+        setStreamHand(streamerName, sHand);
+        setDealerHand(streamerName, dHand);
+        setPot(streamerName, pot);
 
-    return 'Ok';
+        return 'Ok';
+    }, function(err) {
+        console.log(err);
+    });
 }
 
 // No need to open client below this point because we open it in our get and sets
 function insertUser(streamerName, userName) {
-    let leaderboard = getLeaderboard(streamerName);
+    getLeaderboard(streamerName).then(function(result) {
+        let leaderboard = result;
 
-    if (leaderboard) {
-        leaderboard = [];
-        leaderboard.push([username, pot]);
-    } else {
-        let index = leaderboard.indexof(userName);
-
-        if (index >= 0) {
-            leaderboard[index][1] += pot;
-            let temp = leader[index];
-            leaderboard.splice(index, 1);
-            for (let i = 0; i < leaderboard.length; i++) {
-                if (leaderboard[i][1] < pot) {
-                    leaderboard.splice(i, 0, temp);
-                }
-            }
+        if (leaderboard) {
+            leaderboard = [];
+            leaderboard.push([username, pot]);
         } else {
-            for (let i = 0; i < leaderboard.length; i++) {
-                if (leaderboard[i][1] < pot) {
-                    leaderboard.splice(i, 0, [username, pot]);
+            let index = leaderboard.indexof(userName);
+    
+            if (index >= 0) {
+                leaderboard[index][1] += pot;
+                let temp = leader[index];
+                leaderboard.splice(index, 1);
+                for (let i = 0; i < leaderboard.length; i++) {
+                    if (leaderboard[i][1] < pot) {
+                        leaderboard.splice(i, 0, temp);
+                    }
+                }
+            } else {
+                for (let i = 0; i < leaderboard.length; i++) {
+                    if (leaderboard[i][1] < pot) {
+                        leaderboard.splice(i, 0, [username, pot]);
+                    }
                 }
             }
         }
-    }
-
-    setLeaderboard(streamerName, leaderboard);
-
-    return 'Ok';
+    
+        setLeaderboard(streamerName, leaderboard);
+    
+        return 'Ok';
+    }, function(err) {
+        console.log(err);
+    });
 }
 
 function pBust(streamerName) {
-    let playerHand = getStreamHand(streamerName);
-    let dealerHand = getDealerHand(streamerName);
-    let gamePot = getPot(streamerName);
+    getStreamHand(streamerName).then(function(result) {
+        let playerHand = result;
+        getDealerHand(streamerName).then(function(result) {
+            let dealerHand = result;
+            getPot(streamerName).then(function(result) {
+                let gamePot = result;
 
-    sHand = nullCheck(sHand, playerHand);
-    dHand = nullCheck(dHand, dealerHand);
-    pot = nullCheck(pot, gamePot);
-
-    insertUser(streamerName, streamerName);
-
-    pot = 0;
-    sHand = [getCard(), getCard()];
-    initDealer(streamerName);
-
-    setPot(streamerName, pot);
-    setStreamHand(streamerName, sHand);
-    setDealerHand(streamerName, dHand);
-
-    return 'Ok';
+                sHand = nullCheck(sHand, playerHand);
+                dHand = nullCheck(dHand, dealerHand);
+                pot = nullCheck(pot, gamePot);
+            
+                insertUser(streamerName, streamerName);
+            
+                pot = 0;
+                sHand = [getCard(), getCard()];
+                initDealer(streamerName);
+            
+                setPot(streamerName, pot);
+                setStreamHand(streamerName, sHand);
+                setDealerHand(streamerName, dHand);
+            
+                return 'Ok';
+            }, function(err) {
+                console.log(err);
+            })
+        }, function(err) {
+            console.log(err);
+        });
+    }, function(err) {
+        console.log(err);
+    });
 }
 
 function handValue(hand) {
@@ -382,12 +473,12 @@ function nullCheck(local, db) {
 }
 
 function initialize(streamerName) {
-    // initDealer(streamerName);
+    initDealer(streamerName);
     setLeaderboard(streamerName, []);
-    // setStreamHand(streamerName, sHand);
-    // setDealerHand(streamerName, dHand);
-    // setQueue(streamerName, queue);
-    // setPot(streamerName, pot);
+    setStreamHand(streamerName, sHand);
+    setDealerHand(streamerName, dHand);
+    setQueue(streamerName, queue);
+    setPot(streamerName, pot);
 }
 
 function closeConnect() {
@@ -402,7 +493,6 @@ exports.pBust = pBust;
 exports.win = win;
 exports.stand = stand;
 exports.hit = hit;
-exports.startGame = startGame;
 exports.setPot = setPot;
 exports.getPot = getPot;
 exports.setQueue = setQueue;
