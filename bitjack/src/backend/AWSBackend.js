@@ -9,6 +9,7 @@ var sHand = [getCard(), getCard()];
 var dHand = [];
 var pot = 0;
 var queue = [];
+var streamerName = '';
 
 const dbName = "BitJack";
 const sHandID = 1;
@@ -16,6 +17,14 @@ const dHandID = 2;
 const potID = 3;
 const queueID = 4;
 const leaderboardID = 5;
+
+// setInterval(() => {
+//   if (streamerName.length > 0) {
+//     getQueue(streamerName).then(function(result) {
+//       let
+//     }, function(err) {});
+//   }
+// }, 5000);
 
 function exists(col, paramID, genericFunction) {
   let result = col.find({ id: paramID });
@@ -416,15 +425,21 @@ function insertUser(streamerName, userName) {
       let leaderboard = result;
       leaderboard = leaderboard[0]["Leaderboard"];
 
-      if (leaderboard) {
+      if (!leaderboard) {
         leaderboard = [streamerName, 0];
         leaderboard.push([username, pot]);
       } else {
-        let index = leaderboard.indexof(userName);
+        let index = -1;
+        for (let i = 0; i < leaderboard.length; i++) {
+          if (leaderboard[i][0] == userName) {
+            index = i;
+          }
+        }
 
         if (index >= 0) {
           leaderboard[index][1] += pot;
           let temp = leader[index];
+          
           leaderboard.splice(index, 1);
           for (let i = 0; i < leaderboard.length; i++) {
             if (leaderboard[i][1] < pot) {
@@ -538,7 +553,7 @@ function nullCheck(local, db) {
 
 function initialize(streamerName) {
   initDealer(streamerName);
-  setLeaderboard(streamerName, [streamerName, 0]);
+  setLeaderboard(streamerName, [[streamerName, 0]]);
   setStreamHand(streamerName, sHand);
   setDealerHand(streamerName, dHand);
   setQueue(streamerName, queue);
