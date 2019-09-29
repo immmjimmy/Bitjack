@@ -32,6 +32,10 @@ app.get('/stand/:streamerName/:userName', function(req, res) {
     res.send(backendModule.stand(req.params['streamerName'], req.params['userName']));
 })
 
+app.get('/addToQueue/:streamerName/:userName', function(req, res) {
+    res.send(backendModule.addToQueue(req.params['streamerName'], req.params['userName']));
+})
+
 app.get('/initialize/:streamerName', function(req, res) {
     backendModule.initialize(req.params['streamerName']);
     res.status(200).send('Ok');
