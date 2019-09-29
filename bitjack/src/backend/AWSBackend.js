@@ -56,6 +56,7 @@ function getLeaderboard(streamerName) {
             );
         });
     });
+    
 }
 
 function setLeaderboard(streamerName, leaderboard) {
@@ -86,25 +87,42 @@ function getStreamHand(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
 
-        let result = col.find(
-            { },
-            {'StreamHand': 1, _id: 0 });
+        
+        let result = col.find({'id': sHandID});
+        getDocument(col, sHandID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('No Results');
+                    }
 
-        client.close();
-        return result;
-    });
+                });
+            });
+        });
 }
 
 function setStreamHand(streamerName, streamHand) {
     client.connect(url, function(err, client) {
         db = client.db(dbName);
         col = db.collection(streamerName);
-    
-        col.insertOne({'StreamHand': streamHand}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, sHandID, function(booleanbud) {
+            console.log(booleanbud);
+            if(booleanbud) {
+                col.updateOne({'id': sHandID},{'streamHand':streamHand, 'id':sHandID}, function(err, result) {
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'streamHand' : sHand, 'id':sHandID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
         client.close();
         return 'Ok';
+        });
+        
     });
 }
 
@@ -113,11 +131,19 @@ function getDealerHand(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'DealerHand': 1, _id: 0});
-        client.close();
-        return result;
+        let result = col.find({'id': dHandID});
+        getDocument(col,dHandID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) { 
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('NO results');
+                    }
+                }
+            );
+        });
     });
 }
 
@@ -125,13 +151,20 @@ function setDealerHand(streamerName, dealerHand) {
     client.connect(url, function(err, client) {
         db = client.db(dbName);
         col = db.collection(streamerName);
-    
-        col.insertOne({'DealerHand': dealerHand}, function(err, result) {
-            console.log(result);
-        });
-    
-        client.close();
-        return 'Ok';
+     exists(col, dHandID, function(booleanboy) {
+         console.log(booleanboy);
+         if(booleanboy) {
+             col.updateOne({'id':dHandID}, {'DealerHand': dealerHand, 'id':dHandID}, function(err, result) {
+                 //console.log(result);
+             });
+         } else {
+             col.insertOne({'DealerHand':dealerHand, 'id':dHandID}, function(err, result) {
+                 //console.log(result);
+             });
+         }
+         client.close();
+         return 'ok';
+     });
     });
 }
 
@@ -140,12 +173,19 @@ function getQueue(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'Queue': 1, _id: 0});
-    
-        client.close();
-        return result;
+        let result = col.find({'id': queueID});
+        getDocument(col, queueID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if (result.length > 0) {
+                        resolve(result);
+                    } else {
+                        reject('No results');
+                    }
+                }
+            );
+        });
     });
 }
 
@@ -154,12 +194,21 @@ function setQueue(streamerName, queue) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        col.insertOne({'Queue': queue}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, queueID, function(booleanboy) {
+            console.log(booleanboy);
+            if (booleanboy) {
+                col.updateOne({'id': queueID}, {'queue': queue, 'id': queueID}, function(err, result){
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'queue': queue, 'id': queueID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
     
-        client.close();
-        return 'Ok';
+            client.close();
+            return 'Ok';
+        });
     });
 }
 
@@ -168,12 +217,19 @@ function getPot(streamerName) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        let result = col.find(
-            { },
-            {'Pot': 1, _id: 0});
-        
-        client.close();
-        return result;
+        let result = col.find({'id': potID});
+        getDocument(col, potID, function(result) {
+            client.close();
+            return new Promise(
+                function(resolve, reject) {
+                    if(result.length > 0) { 
+                        resolve(result);
+                    } else {
+                        reject('No Results');
+                    }
+
+                });
+            });
     });
 }
 
@@ -182,12 +238,21 @@ function setPot(streamerName, pot) {
         db = client.db(dbName);
         col = db.collection(streamerName);
     
-        col.insertOne({'Pot': pot}, function(err, result) {
-            console.log(result);
-        });
+        exists(col, potID, function(booleanboy) {
+            console.log(booleanboy);
+            if (booleanboy) {
+                col.updateOne({'id': potID}, {'pot': pot, 'id': potID}, function(err, result){
+                    //console.log(result);
+                });
+            } else {
+                col.insertOne({'pot': pot, 'id': potID}, function(err, result) {
+                    //console.log(result);
+                });
+            }
     
-        client.close();
-        return 'Ok';
+            client.close();
+            return 'Ok';
+        });
     });
 }
 
@@ -366,12 +431,20 @@ function getCard() {
 }
 
 function initDealer(streamerName) {
-    dHand = [getCard(), getCard()];
-    if (handValue(dHand) == 21) {
-        initDealer(streamerName);
-    } else {
-        setDealerHand(streamerName, dHand);
-    }
+    client.connect(url, function(err, client) {
+    db = client.db(dbName);
+    col = db.collection(streamerName);
+    
+        dHand = [getCard(), getCard()];
+        if (handValue(dHand) == 21) {
+            initDealer(streamerName);
+        } else {
+            setDealerHand(streamerName, dHand);
+        }
+
+        client.close();
+
+    });
 }
 
 function nullCheck(local, db) {
@@ -382,12 +455,12 @@ function nullCheck(local, db) {
 }
 
 function initialize(streamerName) {
-    // initDealer(streamerName);
+    initDealer(streamerName);
     setLeaderboard(streamerName, []);
-    // setStreamHand(streamerName, sHand);
-    // setDealerHand(streamerName, dHand);
-    // setQueue(streamerName, queue);
-    // setPot(streamerName, pot);
+    setStreamHand(streamerName, sHand);
+    //setDealerHand(streamerName, dHand);
+    setQueue(streamerName, queue);
+    setPot(streamerName, pot);
 }
 
 function closeConnect() {

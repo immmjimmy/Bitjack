@@ -24,6 +24,14 @@ app.get('/getLeaderboard/:streamerName', function(req, res) {
     res.send(backendModule.getLeaderboard(req.params['streamerName']))
 })
 
+app.get('/hit/:streamerName/:userName', function(req, res) {
+    res.send(backendModule.hit(req.params['streamerName'], req.params['userName']));
+})
+
+app.get('/stand/:streamerName/:userName', function(req, res) {
+    res.send(backendModule.stand(req.params['streamerName'], req.params['userName']))
+})
+
 app.get('/initialize/:streamerName', function(req, res) {
     backendModule.initialize(req.params['streamerName']);
     res.status(200).send('Ok');
