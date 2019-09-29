@@ -1,49 +1,18 @@
 {
   "allowHttpBackend": false,
-  "backendCommand": "",
-  "backendFolderName": "",
-  "certificateExceptions": [
-    {
-      "isAllowed": true,
-      "isEphemeral": false,
-      "isOrigin": false,
-      "value": "https://localhost:8080/video_overlay.html?anchor=video_overlay&language=en&locale=en-US&mode=viewer&state=testing&platform=web&legacyComponentDesign=true"
-    },
-    {
-      "isAllowed": true,
-      "isEphemeral": false,
-      "isOrigin": false,
-      "value": "wss://localhost:8080/sockjs-node/948/wnnzdgcl/websocket"
-    },
-    {
-      "isAllowed": true,
-      "isEphemeral": false,
-      "isOrigin": false,
-      "value": "wss://localhost:8080/sockjs-node/192/ihd5wxej/websocket"
-    },
-    {
-      "isAllowed": true,
-      "isEphemeral": false,
-      "isOrigin": false,
-      "value": "wss://localhost:8080/sockjs-node/337/fd4jwmoq/websocket"
-    },
-    {
-      "isAllowed": true,
-      "isEphemeral": false,
-      "isOrigin": false,
-      "value": "https://localhost:8080/sockjs-node/info?t=1569725663805"
-    }
-  ],
+  "backendCommand": "node Routing.js",
+  "backendFolderName": "/Users/Jimmy/Twitch Extensions/Bitjack/bitjack/src/backend",
+  "certificateExceptions": [],
   "extensionViews": [
     {
-      "id": "1",
+      "id": "2",
       "label": "",
-      "channelId": "114001374",
-      "configurationAnchor": "video_overlay",
-      "displayChannelName": "GalaxyBrainMan",
-      "type": "video_overlay",
+      "channelId": "103970450",
+      "configurationAnchor": "component",
+      "displayChannelName": "immmjimmy",
+      "type": "component",
       "features": {
-        "isBitsEnabled": true,
+        "isBitsEnabled": false,
         "isChatEnabled": true,
         "isSubscriptionStatusAvailable": false
       },
@@ -69,7 +38,7 @@
     "configurationLocation": "none",
     "description": "",
     "eulaTosUrl": "",
-    "hasChatSupport": false,
+    "hasChatSupport": true,
     "iconUrl": "",
     "iconUrls": {},
     "id": "qtbof0zg2u05ewf4lxj99qamt4lwm8",
