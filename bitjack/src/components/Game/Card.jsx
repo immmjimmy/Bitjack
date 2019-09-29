@@ -23,7 +23,7 @@ const Card = props => {
   const { value, suit, flip, classes } = props;
   // The back of the card should be the default state
   const defaultFlip = flip !== "0" ? true : false;
-  console.log(defaultFlip);
+
   const [flipped, setFlipped] = useState(defaultFlip);
 
   return (
