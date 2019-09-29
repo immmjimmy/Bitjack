@@ -1,6 +1,7 @@
 const backendModule = require('./AWSBackend');
 var express = require('express');
 var app =  express();
+var http = require('http');
 
 
 app.get('/getPot/:streamerName', function(req, res) {
@@ -23,10 +24,11 @@ app.get('/getLeaderboard/:streamerName', function(req, res) {
     res.send(backendModule.getLeaderboard(req.params['streamerName']))
 })
 
-app.set('/initialize/:streamerName', function(req, res) {
-   backendModule.initialize(streamerName);
+app.get('/initialize/:streamerName', function(req, res) {
+    backendModule.initialize(req.params['streamerName']);
+    res.status(200).send('Ok');
 })
 
-app.set('/close', function(req, res) {
-    backendModule.closeConnect();
+http.createServer(app).listen(8080, function() {
+    console.log('Express server listening on port 8080');
 })
