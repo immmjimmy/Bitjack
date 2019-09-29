@@ -2,32 +2,39 @@
   "allowHttpBackend": false,
   "backendCommand": "",
   "backendFolderName": "",
-  "certificateExceptions": [],
-  "extensionViews": [
+  "certificateExceptions": [
     {
-      "id": "1",
-      "label": "main",
-      "channelId": "103970450",
-      "configurationAnchor": "component",
-      "displayChannelName": "immmjimmy",
-      "type": "component",
-      "features": {
-        "isBitsEnabled": false,
-        "isChatEnabled": false,
-        "isSubscriptionStatusAvailable": false
-      },
-      "linked": false,
-      "linkedUserId": "",
-      "mode": "viewer",
-      "isPopout": false,
-      "role": "Broadcaster",
-      "orientation": "Portrait",
-      "frameSize": {
-        "width": 1280,
-        "height": 720
-      }
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "https://localhost:8080/video_overlay.html?anchor=video_overlay&language=en&locale=en-US&mode=viewer&state=testing&platform=web&legacyComponentDesign=true"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/948/wnnzdgcl/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/192/ihd5wxej/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://localhost:8080/sockjs-node/337/fd4jwmoq/websocket"
+    },
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "https://localhost:8080/sockjs-node/info?t=1569725663805"
     }
   ],
+  "extensionViews": [],
   "manifest": {
     "anchor": "component",
     "assetUrls": [],
