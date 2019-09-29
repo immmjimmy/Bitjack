@@ -60,7 +60,7 @@
     }
   ],
   "manifest": {
-    "anchor": "video_overlay",
+    "anchor": "component",
     "assetUrls": [],
     "authorName": "immmjimmy",
     "bitsEnabled": false,
@@ -91,11 +91,21 @@
     "viewerSummary": "",
     "viewerUrl": "",
     "viewerUrls": {
-      "videoOverlay": "https://localhost:8080/video_overlay.html"
+      "component": "https://localhost:8080/video_component.html"
     },
     "views": {
-      "videoOverlay": {
-        "viewerUrl": "https://localhost:8080/video_overlay.html",
+      "component": {
+        "viewerUrl": "https://localhost:8080/video_component.html",
+        "aspectWidth": 0,
+        "aspectHeight": 0,
+        "aspectRatioX": 100,
+        "aspectRatioY": 100,
+        "autoscale": true,
+        "scalePixels": 1024,
+        "targetHeight": 7000,
+        "size": 0,
+        "zoom": false,
+        "zoomPixels": 0,
         "canLinkExternalContent": false
       },
       "config": {
@@ -107,7 +117,7 @@
     "whitelistedPanelUrls": []
   },
   "frontendCommand": "npm run start",
-  "frontendFolderName": "C:\\Users\\jason\\Desktop\\BitJack\\Bitjack",
+  "frontendFolderName": "/Users/Jimmy/Twitch Extensions/Bitjack/bitjack",
   "name": "BitJack",
   "version": 1
 }
