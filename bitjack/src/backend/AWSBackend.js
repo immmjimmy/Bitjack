@@ -9,7 +9,7 @@ var sHand = [getCard(), getCard()];
 var dHand = [];
 var pot = 0;
 var queue = [];
-var streamerName = '';
+var sName = '';
 
 const dbName = "BitJack";
 const sHandID = 1;
@@ -18,13 +18,22 @@ const potID = 3;
 const queueID = 4;
 const leaderboardID = 5;
 
-// setInterval(() => {
-//   if (streamerName.length > 0) {
-//     getQueue(streamerName).then(function(result) {
-//       let
-//     }, function(err) {});
-//   }
-// }, 5000);
+setInterval(() => {
+  if (sName.length > 0) {
+    getQueue(sName).then(function(result) {
+      let gameQueue = result[0]['queue'];
+      queue = nullCheck(queue, gameQueue);
+
+      if (queue.length > 0) {
+        if (queue[0][1] == 'hit') {
+          hit(sName, queue[0][0]);
+        } else {
+          stand(sName, queue[0][0]);
+        }
+      }
+    }, function(err) {});
+  }
+}, 5000);
 
 function exists(col, paramID, genericFunction) {
   let result = col.find({ id: paramID });
@@ -47,6 +56,7 @@ function getDocument(col, paramID, genericFunction) {
 }
 
 function getLeaderboard(streamerName) {
+  sName = streamerName;
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, client) {
       db = client.db(dbName);
@@ -67,6 +77,7 @@ function getLeaderboard(streamerName) {
 }
 
 function setLeaderboard(streamerName, leaderboard) {
+  sName = streamerName;
   client.connect(url, function(err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
@@ -97,6 +108,7 @@ function setLeaderboard(streamerName, leaderboard) {
 }
 
 function getStreamHand(streamerName) {
+  sName = streamerName;
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, client) {
       db = client.db(dbName);
@@ -117,6 +129,7 @@ function getStreamHand(streamerName) {
 }
 
 function setStreamHand(streamerName, streamHand) {
+  sName = streamerName;
   client.connect(url, function(err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
@@ -145,6 +158,7 @@ function setStreamHand(streamerName, streamHand) {
 }
 
 function getDealerHand(streamerName) {
+  sName = streamerName;
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, client) {
       db = client.db(dbName);
@@ -165,6 +179,7 @@ function getDealerHand(streamerName) {
 }
 
 function setDealerHand(streamerName, dealerHand) {
+  sName = streamerName;
   client.connect(url, function(err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
@@ -193,6 +208,7 @@ function setDealerHand(streamerName, dealerHand) {
 }
 
 function getQueue(streamerName) {
+  sName = streamerName;
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, client) {
       db = client.db(dbName);
@@ -213,6 +229,7 @@ function getQueue(streamerName) {
 }
 
 function setQueue(streamerName, queue) {
+  sName = streamerName;
   client.connect(url, function(err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
@@ -240,6 +257,7 @@ function setQueue(streamerName, queue) {
 }
 
 function getPot(streamerName) {
+  sName = streamerName;
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, client) {
       db = client.db(dbName);
@@ -260,6 +278,7 @@ function getPot(streamerName) {
 }
 
 function setPot(streamerName, pot) {
+  sName = streamerName;
   client.connect(url, function(err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
@@ -287,6 +306,7 @@ function setPot(streamerName, pot) {
 
 // No need to open client below this point because we open it in our get and sets
 function hit(streamerName, userName) {
+  sName = streamerName;
   getStreamHand(streamerName).then(
     function(result) {
       let playerHand = result;
@@ -326,6 +346,7 @@ function hit(streamerName, userName) {
 
 // No need to open client below this point because we open it in our get and sets
 function stand(streamerName, userName) {
+  sName = streamerName;
   getStreamHand(streamerName).then(
     function(result) {
       let playerHand = result;
@@ -376,6 +397,7 @@ function stand(streamerName, userName) {
 }
 
 function addToQueue(streamerName, userName, action) {
+  sName = streamerName;
   getQueue(streamerName).then(
     function(result) {
       let gameQueue = result;
@@ -395,6 +417,7 @@ function addToQueue(streamerName, userName, action) {
 
 // No need to open client below this point because we open it in our get and sets
 function win(streamerName, userName) {
+  sName = streamerName;
   getPot(streamerName).then(
     function(result) {
       let gamePot = result;
@@ -420,6 +443,7 @@ function win(streamerName, userName) {
 
 // No need to open client below this point because we open it in our get and sets
 function insertUser(streamerName, userName) {
+  sName = streamerName;
   getLeaderboard(streamerName).then(
     function(result) {
       let leaderboard = result;
@@ -466,6 +490,7 @@ function insertUser(streamerName, userName) {
 }
 
 function pBust(streamerName) {
+  sName = streamerName;
   pot = 0;
   sHand = [getCard(), getCard()];
   initDealer(streamerName);
@@ -478,6 +503,7 @@ function pBust(streamerName) {
 }
 
 function addToPot(streamerName, addition) {
+  sName = streamerName;
   getPot(streamerName).then(
     function(result) {
       let gamePot = result;
@@ -536,6 +562,7 @@ function getCard() {
 }
 
 function initDealer(streamerName) {
+  sName = streamerName;
   dHand = [getCard(), getCard()];
   if (handValue(dHand) == 21) {
     initDealer(streamerName);
@@ -552,6 +579,7 @@ function nullCheck(local, db) {
 }
 
 function initialize(streamerName) {
+  sName = streamerName;
   initDealer(streamerName);
   setLeaderboard(streamerName, [[streamerName, 0]]);
   setStreamHand(streamerName, sHand);
