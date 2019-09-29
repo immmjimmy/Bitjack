@@ -29,7 +29,7 @@ app.get('/hit/:streamerName/:userName', function(req, res) {
 })
 
 app.get('/stand/:streamerName/:userName', function(req, res) {
-    res.send(backendModule.stand(req.params['streamerName'], req.params['userName']))
+    res.send(backendModule.stand(req.params['streamerName'], req.params['userName']));
 })
 
 app.get('/initialize/:streamerName', function(req, res) {
