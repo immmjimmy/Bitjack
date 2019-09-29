@@ -38,19 +38,20 @@ function getDocument(col, paramID, genericFunction) {
 }
 
 function getLeaderboard(streamerName) {
-  client.connect(url, function(err, client) {
-    db = client.db(dbName);
-    col = db.collection(streamerName);
+  return new Promise(function(resolve, reject) {
+    client.connect(url, function(err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-    let result = col.find({ id: leaderboardID });
-    getDocument(col, leaderboardID, function(result) {
-      client.close();
-      return new Promise(function(resolve, reject) {
+      let result = col.find({ id: leaderboardID });
+      getDocument(col, leaderboardID, function(result) {
+        client.close();
         if (result.length > 0) {
           resolve(result);
         } else {
-          reject("No results");
+          reject("No Results");
         }
+        console.log(result);
       });
     });
   });
@@ -100,6 +101,7 @@ function getStreamHand(streamerName) {
         } else {
           reject("No Results");
         }
+        console.log(result);
       });
     });
   });
@@ -134,19 +136,20 @@ function setStreamHand(streamerName, streamHand) {
 }
 
 function getDealerHand(streamerName) {
-  client.connect(url, function(err, client) {
-    db = client.db(dbName);
-    col = db.collection(streamerName);
+  return new Promise(function(resolve, reject) {
+    client.connect(url, function(err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-    let result = col.find({ id: dHandID });
-    getDocument(col, dHandID, function(result) {
-      client.close();
-      return new Promise(function(resolve, reject) {
+      let result = col.find({ id: dHandID });
+      getDocument(col, dHandID, function(result) {
+        client.close();
         if (result.length > 0) {
           resolve(result);
         } else {
-          reject("NO results");
+          reject("No Results");
         }
+        console.log(result);
       });
     });
   });
@@ -181,19 +184,20 @@ function setDealerHand(streamerName, dealerHand) {
 }
 
 function getQueue(streamerName) {
-  client.connect(url, function(err, client) {
-    db = client.db(dbName);
-    col = db.collection(streamerName);
+  return new Promise(function(resolve, reject) {
+    client.connect(url, function(err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-    let result = col.find({ id: queueID });
-    getDocument(col, queueID, function(result) {
-      client.close();
-      return new Promise(function(resolve, reject) {
+      let result = col.find({ id: queueID });
+      getDocument(col, queueID, function(result) {
+        client.close();
         if (result.length > 0) {
           resolve(result);
         } else {
-          reject("No results");
+          reject("No Results");
         }
+        console.log(result);
       });
     });
   });
@@ -226,19 +230,20 @@ function setQueue(streamerName, queue) {
 }
 
 function getPot(streamerName) {
-  client.connect(url, function(err, client) {
-    db = client.db(dbName);
-    col = db.collection(streamerName);
+  return new Promise(function(resolve, reject) {
+    client.connect(url, function(err, client) {
+      db = client.db(dbName);
+      col = db.collection(streamerName);
 
-    let result = col.find({ id: potID });
-    getDocument(col, potID, function(result) {
-      client.close();
-      return new Promise(function(resolve, reject) {
+      let result = col.find({ id: potID });
+      getDocument(col, potID, function(result) {
+        client.close();
         if (result.length > 0) {
           resolve(result);
         } else {
           reject("No Results");
         }
+        console.log(result);
       });
     });
   });
@@ -272,7 +277,7 @@ function setPot(streamerName, pot) {
 
 // No need to open client below this point because we open it in our get and sets
 function hit(streamerName, userName) {
-  getStreamHand(streamerName).then(
+  getStreamHand(streamerName).resolve(
     function(result) {
       let playerHand = result;
       getQueue(streamerName).then(
@@ -353,7 +358,19 @@ function stand(streamerName, userName) {
 }
 
 function addToQueue(streamerName, userName) {
-  let gameQueue = getQueue(streamerName);
+  getQueue(streamerName).then(
+    function(result) {
+      let gameQueue = result;
+      queue = nullCheck(queue, gameQueue);
+
+      queue.push(userName);
+
+      return "Ok";
+    },
+    function(err) {
+      console.log(err);
+    }
+  );
 }
 
 // No need to open client below this point because we open it in our get and sets
@@ -546,3 +563,4 @@ exports.getDealerHand = getDealerHand;
 exports.setStreamHand = setStreamHand;
 exports.getStreamHand = getStreamHand;
 exports.setLeaderboard = setLeaderboard;
+exports.addToQueue = addToQueue;
