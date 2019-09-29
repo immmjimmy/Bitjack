@@ -1,35 +1,50 @@
 import React, { Component } from "react";
+import axios from "axios";
 
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import Card from "./Card";
 
 class Game extends Component {
   constructor() {
     super();
-    this.twitch = window.Twitch ? window.Twitch.ext : null;
 
     this.state = {
-      pot: 0
+      pot: 0,
+      streamerHand: [],
+      viewerHand: []
     };
   }
 
   componentDidMount() {
-    if (this.twitch) {
-      this.twitch.listen("broadcast", (target, contentType, message) => {
-        console.log(message);
+    axios
+      .get("http://localhost:8081/initialize/gamesdonequick")
+      .then(res => {
+        // console.log(res);
       })
-    }
-  }
+      .catch(err => {
+        console.log(err);
+      });
 
-  componentWillUnmount() {
-    if (this.twitch) {
-      this.twitch.unlisten("broadcast", () =>
-        console.log("successfully unlistened")
-      );
-    }
+    axios
+      .get("http://localhost:8081/getStreamHand/gamesdonequick")
+      .then(res => {
+        this.setState({
+          streamerHand: res.data[0].streamHand
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
+
+    const cards = this.state.streamerHand.map(x => {
+      return <Card number={x} key={x} />
+    });
+    
+    console.log(cards);
+
     return (
       <Grid
         container
@@ -44,16 +59,7 @@ class Game extends Component {
           alignItems="center"
           justify="center"
         >
-          <Card value="10" suit="hearts" flip="0" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="0" />
-          <Card value="5" suit="hearts" flip="1" />
+          {cards}
         </Grid>
         <Grid
           item
@@ -97,18 +103,7 @@ class Game extends Component {
           container
           alignItems="center"
           justify="center"
-        >
-          <Card value="10" suit="hearts" flip="0" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="1" />
-          <Card value="5" suit="hearts" flip="0" />
-          <Card value="5" suit="hearts" flip="1" />
-        </Grid>
+        ></Grid>
       </Grid>
     );
   }

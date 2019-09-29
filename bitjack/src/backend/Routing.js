@@ -13,7 +13,9 @@ app.get('/getQueue/:streamerName', function(req, res) {
 })
 
 app.get('/getStreamHand/:streamerName', function(req, res) {
-    res.send(backendModule.getStreamHand(req.params['streamerName']))
+    backendModule.getStreamHand(req.params['streamerName']).then(result => {
+        res.send(result);
+    });
 })
 
 app.get('/getDealerHand/:streamerName', function(req, res) {
