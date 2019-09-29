@@ -1,8 +1,5 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import App from "./components/App/App"
+import React from "react";
+import ReactDOM from "react-dom";
+import Card from "./components/Game/Card";
 
-ReactDOM.render(
-  <App />,
-  document.getElementById("root")
-)
+ReactDOM.render(<Card value="7" suit="hearts" />, document.getElementById("root"));
