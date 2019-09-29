@@ -20,7 +20,7 @@ const leaderboardID = 5;
 
 setInterval(() => {
   if (sName.length > 0) {
-    getQueue(sName).then(function(result) {
+    getQueue(sName).then(function (result) {
       let gameQueue = result[0]['queue'];
       queue = nullCheck(queue, gameQueue);
 
@@ -31,14 +31,14 @@ setInterval(() => {
           stand(sName, queue[0][0]);
         }
       }
-    }, function(err) {});
+    }, function (err) { });
   }
 }, 5000);
 
 function exists(col, paramID, genericFunction) {
   let result = col.find({ id: paramID });
 
-  result.toArray(function(err, result) {
+  result.toArray(function (err, result) {
     if (result.length > 0) {
       genericFunction(true);
     } else {
@@ -50,20 +50,20 @@ function exists(col, paramID, genericFunction) {
 function getDocument(col, paramID, genericFunction) {
   let result = col.find({ id: paramID });
 
-  result.toArray(function(err, result) {
+  result.toArray(function (err, result) {
     genericFunction(result);
   });
 }
 
 function getLeaderboard(streamerName) {
   sName = streamerName;
-  return new Promise(function(resolve, reject) {
-    client.connect(url, function(err, client) {
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
       db = client.db(dbName);
       col = db.collection(streamerName);
 
       let result = col.find({ id: leaderboardID });
-      getDocument(col, leaderboardID, function(result) {
+      getDocument(col, leaderboardID, function (result) {
         client.close();
         if (result.length > 0) {
           resolve(result);
@@ -78,22 +78,22 @@ function getLeaderboard(streamerName) {
 
 function setLeaderboard(streamerName, leaderboard) {
   sName = streamerName;
-  client.connect(url, function(err, client) {
+  client.connect(url, function (err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
 
-    exists(col, leaderboardID, function(booleanboy) {
+    exists(col, leaderboardID, function (booleanboy) {
       console.log(booleanboy);
       if (booleanboy) {
         col.updateOne(
           { id: leaderboardID },
           { $set: { Leaderboard: leaderboard } },
-          function(err, result) {
+          function (err, result) {
             console.log(result);
           }
         );
       } else {
-        col.insertOne({ Leaderboard: leaderboard, id: leaderboardID }, function(
+        col.insertOne({ Leaderboard: leaderboard, id: leaderboardID }, function (
           err,
           result
         ) {
@@ -109,13 +109,13 @@ function setLeaderboard(streamerName, leaderboard) {
 
 function getStreamHand(streamerName) {
   sName = streamerName;
-  return new Promise(function(resolve, reject) {
-    client.connect(url, function(err, client) {
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
       db = client.db(dbName);
       col = db.collection(streamerName);
 
       let result = col.find({ id: sHandID });
-      getDocument(col, sHandID, function(result) {
+      getDocument(col, sHandID, function (result) {
         client.close();
         if (result.length > 0) {
           resolve(result);
@@ -130,21 +130,21 @@ function getStreamHand(streamerName) {
 
 function setStreamHand(streamerName, streamHand) {
   sName = streamerName;
-  client.connect(url, function(err, client) {
+  client.connect(url, function (err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
-    exists(col, sHandID, function(booleanbud) {
+    exists(col, sHandID, function (booleanbud) {
       console.log(booleanbud);
       if (booleanbud) {
         col.updateOne(
           { id: sHandID },
           { $set: { streamHand: streamHand, id: sHandID } },
-          function(err, result) {
+          function (err, result) {
             console.log(result);
           }
         );
       } else {
-        col.insertOne({ streamHand: sHand, id: sHandID }, function(
+        col.insertOne({ streamHand: sHand, id: sHandID }, function (
           err,
           result
         ) {
@@ -159,13 +159,13 @@ function setStreamHand(streamerName, streamHand) {
 
 function getDealerHand(streamerName) {
   sName = streamerName;
-  return new Promise(function(resolve, reject) {
-    client.connect(url, function(err, client) {
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
       db = client.db(dbName);
       col = db.collection(streamerName);
 
       let result = col.find({ id: dHandID });
-      getDocument(col, dHandID, function(result) {
+      getDocument(col, dHandID, function (result) {
         client.close();
         if (result.length > 0) {
           resolve(result);
@@ -180,21 +180,21 @@ function getDealerHand(streamerName) {
 
 function setDealerHand(streamerName, dealerHand) {
   sName = streamerName;
-  client.connect(url, function(err, client) {
+  client.connect(url, function (err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
-    exists(col, dHandID, function(booleanboy) {
+    exists(col, dHandID, function (booleanboy) {
       console.log(booleanboy);
       if (booleanboy) {
         col.updateOne(
           { id: dHandID },
           { $set: { DealerHand: dealerHand, id: dHandID } },
-          function(err, result) {
+          function (err, result) {
             //console.log(result);
           }
         );
       } else {
-        col.insertOne({ DealerHand: dealerHand, id: dHandID }, function(
+        col.insertOne({ DealerHand: dealerHand, id: dHandID }, function (
           err,
           result
         ) {
@@ -209,13 +209,13 @@ function setDealerHand(streamerName, dealerHand) {
 
 function getQueue(streamerName) {
   sName = streamerName;
-  return new Promise(function(resolve, reject) {
-    client.connect(url, function(err, client) {
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
       db = client.db(dbName);
       col = db.collection(streamerName);
 
       let result = col.find({ id: queueID });
-      getDocument(col, queueID, function(result) {
+      getDocument(col, queueID, function (result) {
         client.close();
         if (result.length > 0) {
           resolve(result);
@@ -230,14 +230,14 @@ function getQueue(streamerName) {
 
 function setQueue(streamerName, queue) {
   sName = streamerName;
-  client.connect(url, function(err, client) {
+  client.connect(url, function (err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
 
-    exists(col, queueID, function(booleanboy) {
+    exists(col, queueID, function (booleanboy) {
       console.log(booleanboy);
       if (booleanboy) {
-        col.updateOne({ id: queueID }, { $set: { queue: queue } }, function(
+        col.updateOne({ id: queueID }, { $set: { queue: queue } }, function (
           err,
           result
         ) {
@@ -245,7 +245,7 @@ function setQueue(streamerName, queue) {
           console.log(result);
         });
       } else {
-        col.insertOne({ queue: queue, id: queueID }, function(err, result) {
+        col.insertOne({ queue: queue, id: queueID }, function (err, result) {
           //console.log(result);
         });
       }
@@ -258,13 +258,13 @@ function setQueue(streamerName, queue) {
 
 function getPot(streamerName) {
   sName = streamerName;
-  return new Promise(function(resolve, reject) {
-    client.connect(url, function(err, client) {
+  return new Promise(function (resolve, reject) {
+    client.connect(url, function (err, client) {
       db = client.db(dbName);
       col = db.collection(streamerName);
 
       let result = col.find({ id: potID });
-      getDocument(col, potID, function(result) {
+      getDocument(col, potID, function (result) {
         client.close();
         if (result.length > 0) {
           resolve(result);
@@ -279,21 +279,21 @@ function getPot(streamerName) {
 
 function setPot(streamerName, pot) {
   sName = streamerName;
-  client.connect(url, function(err, client) {
+  client.connect(url, function (err, client) {
     db = client.db(dbName);
     col = db.collection(streamerName);
 
-    exists(col, potID, function(booleanboy) {
+    exists(col, potID, function (booleanboy) {
       console.log(booleanboy);
       if (booleanboy) {
-        col.updateOne({ id: potID }, { pot: pot, id: potID }, function(
+        col.updateOne({ id: potID }, { $set: { pot: pot, id: potID } }, function (
           err,
           result
         ) {
           //console.log(result);
         });
       } else {
-        col.insertOne({ pot: pot, id: potID }, function(err, result) {
+        col.insertOne({ pot: pot, id: potID }, function (err, result) {
           //console.log(result);
         });
       }
@@ -308,11 +308,11 @@ function setPot(streamerName, pot) {
 function hit(streamerName, userName) {
   sName = streamerName;
   getStreamHand(streamerName).then(
-    function(result) {
+    function (result) {
       let playerHand = result;
       playerHand = playerHand[0]["streamHand"];
       getQueue(streamerName).then(
-        function(result) {
+        function (result) {
           let gameQueue = result;
           gameQueue = gameQueue[0]["queue"];
           sHand = nullCheck(sHand, playerHand);
@@ -333,12 +333,12 @@ function hit(streamerName, userName) {
 
           return "Ok";
         },
-        function(err) {
+        function (err) {
           console.log(err);
         }
       );
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -348,15 +348,15 @@ function hit(streamerName, userName) {
 function stand(streamerName, userName) {
   sName = streamerName;
   getStreamHand(streamerName).then(
-    function(result) {
+    function (result) {
       let playerHand = result;
       playerHand = playerHand[0]["streamHand"];
       getDealerHand(streamerName).then(
-        function(result) {
+        function (result) {
           let dealerHand = result;
           dealerHand = dealerHand[0]["DealerHand"];
           getQueue(streamerName).then(
-            function(result) {
+            function (result) {
               let gameQueue = result;
               gameQueue = gameQueue[0]["queue"];
               sHand = nullCheck(sHand, playerHand);
@@ -376,21 +376,21 @@ function stand(streamerName, userName) {
               queue.shift();
               setQueue(streamerName, queue);
               setStreamHand(streamerName, sHand);
-              setDealerHand(dealerHand, dHand);
+              setDealerHand(streamerName, dHand);
 
               return "Ok";
             },
-            function(err) {
+            function (err) {
               console.log(err);
             }
           );
         },
-        function(err) {
+        function (err) {
           console.log(err);
         }
       );
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -399,7 +399,7 @@ function stand(streamerName, userName) {
 function addToQueue(streamerName, userName, action) {
   sName = streamerName;
   getQueue(streamerName).then(
-    function(result) {
+    function (result) {
       let gameQueue = result;
       gameQueue = gameQueue[0]["queue"];
       queue = nullCheck(queue, gameQueue);
@@ -409,7 +409,7 @@ function addToQueue(streamerName, userName, action) {
       setQueue(streamerName, queue);
       return "Ok";
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -419,23 +419,28 @@ function addToQueue(streamerName, userName, action) {
 function win(streamerName, userName) {
   sName = streamerName;
   getPot(streamerName).then(
-    function(result) {
+    function (result) {
       let gamePot = result;
       gamePot = gamePot[0]["pot"];
-      pot = nullCheck(pot, gamePot);
+      getLeaderboard(streamerName).then(function(result) {
+        leaderboard = leaderboard[0]['Leaderboard'];
+        pot = nullCheck(pot, gamePot);
 
-      insertUser(streamerName, userName);
-      pot = 0;
-      sHand = [getCard(), getCard()];
-      initDealer(streamerName);
+        insertUser(streamerName, userName);
+        pot = 0;
+        sHand = [getCard(), getCard()];
+        initDealer(streamerName);
 
-      setStreamHand(streamerName, sHand);
-      setDealerHand(streamerName, dHand);
-      setPot(streamerName, pot);
+        setStreamHand(streamerName, sHand);
+        setDealerHand(streamerName, dHand);
+        setPot(streamerName, pot);
 
-      return "Ok";
+        return "Ok";
+      }, function(err) {
+        console.log(err);
+      })
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -445,7 +450,7 @@ function win(streamerName, userName) {
 function insertUser(streamerName, userName) {
   sName = streamerName;
   getLeaderboard(streamerName).then(
-    function(result) {
+    function (result) {
       let leaderboard = result;
       leaderboard = leaderboard[0]["Leaderboard"];
 
@@ -463,7 +468,7 @@ function insertUser(streamerName, userName) {
         if (index >= 0) {
           leaderboard[index][1] += pot;
           let temp = leader[index];
-          
+
           leaderboard.splice(index, 1);
           for (let i = 0; i < leaderboard.length; i++) {
             if (leaderboard[i][1] < pot) {
@@ -483,7 +488,7 @@ function insertUser(streamerName, userName) {
 
       return "Ok";
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -505,18 +510,18 @@ function pBust(streamerName) {
 function addToPot(streamerName, addition) {
   sName = streamerName;
   getPot(streamerName).then(
-    function(result) {
+    function (result) {
       let gamePot = result;
       gamePot = gamePot[0]["pot"];
       pot = nullCheck(pot, gamePot);
 
-      pot = pot + addition;
+      pot = Number(pot) + Number(addition);
 
       setPot(streamerName, pot);
 
       return "Ok";
     },
-    function(err) {
+    function (err) {
       console.log(err);
     }
   );
@@ -528,7 +533,7 @@ function handValue(hand) {
 
   for (let i = 0; i < hand.length; i++) {
     let value = cardValue(hand[i]);
-    if (value == 1) {
+    if (value == 11) {
       aces = aces + 1;
     } else {
       sum = sum + value;
